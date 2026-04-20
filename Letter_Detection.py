@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torchvision import datasets, transforms
-from torch.utils.data import DataLoader, Subset
+from torch.utils.data import DataLoader, Dataset
 import kagglehub
 import os
 
@@ -24,18 +24,33 @@ full_val_ds = datasets.ImageFolder(root=val_dir, transform=data_transforms)
 
 # Filter classes to match the 35 characters used in the reference notebook
 non_chars = ["#", "$", "&", "@"]
-def get_filtered_indices(dataset, ignore_list):
-    indices = [i for i, (img_path, label) in enumerate(dataset.imgs) 
-               if dataset.classes[label] not in ignore_list]
-    return indices
+class FilteredRemappedDataset(Dataset):
+    def __init__(self, dataset, keep_classes, class_to_idx):
+        self.dataset = dataset
+        self.class_to_idx = class_to_idx
+        self.indices = [
+            i for i, (_, label) in enumerate(dataset.imgs)
+            if dataset.classes[label] in keep_classes
+        ]
 
-train_indices = get_filtered_indices(full_train_ds, non_chars)
-val_indices = get_filtered_indices(full_val_ds, non_chars)
+    def __len__(self):
+        return len(self.indices)
 
-train_loader = DataLoader(Subset(full_train_ds, train_indices), batch_size=32, shuffle=True)
-val_loader = DataLoader(Subset(full_val_ds, val_indices), batch_size=32, shuffle=False)
+    def __getitem__(self, idx):
+        image, original_label = self.dataset[self.indices[idx]]
+        class_name = self.dataset.classes[original_label]
+        remapped_label = self.class_to_idx[class_name]
+        return image, remapped_label
+keep_classes = [c for c in full_train_ds.classes if c not in non_chars]
+class_to_idx = {class_name: idx for idx, class_name in enumerate(keep_classes)}
 
-num_classes = len(full_train_ds.classes) - len(non_chars) # Results in 35
+train_ds = FilteredRemappedDataset(full_train_ds, keep_classes, class_to_idx)
+val_ds = FilteredRemappedDataset(full_val_ds, keep_classes, class_to_idx)
+
+train_loader = DataLoader(train_ds, batch_size=32, shuffle=True)
+val_loader = DataLoader(val_ds, batch_size=32, shuffle=False)
+
+num_classes = len(keep_classes) # Results in 35
 
 class CharacterCNN(nn.Module):
     def __init__(self, num_classes):
@@ -107,4 +122,7 @@ def train(epochs=15):
             
         print(f"Epoch {epoch+1} Loss: {total_loss/len(train_loader):.4f}")
 
-train()
+
+if __name__ == "__main__":
+    epochs = int(os.getenv("EPOCHS", "15"))
+    train(epochs=epochs)
