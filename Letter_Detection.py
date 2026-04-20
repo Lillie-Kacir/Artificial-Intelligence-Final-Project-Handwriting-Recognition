@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torchvision import datasets, transforms
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader, Dataset, Subset
 import kagglehub
 import os
 
@@ -47,8 +47,17 @@ class_to_idx = {class_name: idx for idx, class_name in enumerate(keep_classes)}
 train_ds = FilteredRemappedDataset(full_train_ds, keep_classes, class_to_idx)
 val_ds = FilteredRemappedDataset(full_val_ds, keep_classes, class_to_idx)
 
-train_loader = DataLoader(train_ds, batch_size=32, shuffle=True)
-val_loader = DataLoader(val_ds, batch_size=32, shuffle=False)
+BATCH_SIZE = int(os.getenv("BATCH_SIZE", "32"))
+MAX_TRAIN_SAMPLES = int(os.getenv("MAX_TRAIN_SAMPLES", "0"))
+MAX_VAL_SAMPLES = int(os.getenv("MAX_VAL_SAMPLES", "0"))
+
+if MAX_TRAIN_SAMPLES > 0:
+    train_ds = Subset(train_ds, range(min(MAX_TRAIN_SAMPLES, len(train_ds))))
+if MAX_VAL_SAMPLES > 0:
+    val_ds = Subset(val_ds, range(min(MAX_VAL_SAMPLES, len(val_ds))))
+
+train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True)
+val_loader = DataLoader(val_ds, batch_size=BATCH_SIZE, shuffle=False)
 
 num_classes = len(keep_classes) # Results in 35
 
@@ -125,4 +134,8 @@ def train(epochs=15):
 
 if __name__ == "__main__":
     epochs = int(os.getenv("EPOCHS", "15"))
+    print(
+        f"Training config: epochs={epochs}, batch_size={BATCH_SIZE}, "
+        f"train_samples={len(train_ds)}, val_samples={len(val_ds)}, device={device}"
+    )
     train(epochs=epochs)
