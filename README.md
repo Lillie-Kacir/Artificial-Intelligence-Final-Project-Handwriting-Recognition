@@ -12,6 +12,8 @@ This repository now includes an end-to-end handwriting processing pipeline that:
 Create and activate/install with your virtualenv (or use `.venv/bin/...` commands directly):
 
 ```bash
+sudo apt-get update
+sudo apt-get install -y python3.12-venv tesseract-ocr
 python3 -m venv .venv
 .venv/bin/python -m pip install --upgrade pip
 .venv/bin/pip install -r requirements.txt
