@@ -1,0 +1,9 @@
+kagglehub
+numpy
+opencv-python
+pillow
+pytesseract
+pyspellchecker
+python-docx
+torch
+torchvision
