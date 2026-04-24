@@ -46,3 +46,13 @@ This creates:
 - `sample_handwriting.png`
 - `demo_output/predicted_words.txt`
 - `demo_output/predicted_words.docx`
+
+## Accuracy check
+
+Run a quick evaluation against the built-in demo reference text:
+
+```bash
+.venv/bin/python evaluate_pipeline.py
+```
+
+This prints the expected text, predicted text, and word-level accuracy.
