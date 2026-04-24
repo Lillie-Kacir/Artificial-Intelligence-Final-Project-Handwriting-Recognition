@@ -31,6 +31,36 @@ Outputs:
 - `outputs/predicted_words.txt`
 - `outputs/predicted_words.docx`
 
+## Train and use the CharacterCNN model
+
+Train the CNN and save a checkpoint:
+
+```bash
+EPOCHS=1 MAX_TRAIN_SAMPLES=512 MAX_VAL_SAMPLES=256 \
+  .venv/bin/python Letter_Detection.py
+```
+
+Default checkpoint path:
+- `models/character_cnn.pt`
+
+Run pipeline with CNN-assisted refinement:
+
+```bash
+.venv/bin/python handwriting_pipeline.py \
+  --image path/to/handwritten_image.png \
+  --output-stem outputs/predicted_words \
+  --cnn-checkpoint models/character_cnn.pt
+```
+
+Disable CNN and use OCR-only mode:
+
+```bash
+.venv/bin/python handwriting_pipeline.py \
+  --image path/to/handwritten_image.png \
+  --output-stem outputs/predicted_words \
+  --disable-cnn
+```
+
 ## Demo
 
 You can generate a sample handwritten-style image and run the full pipeline:
