@@ -118,8 +118,10 @@ def save_checkpoint(model: CharacterCNN, class_names: list[str], path: Path) -> 
 if __name__ == "__main__":
     epochs = int(os.getenv("EPOCHS", "15"))
     batch_size = int(os.getenv("BATCH_SIZE", "32"))
-    max_train_samples = int(os.getenv("MAX_TRAIN_SAMPLES", "0"))
-    max_val_samples = int(os.getenv("MAX_VAL_SAMPLES", "0"))
+    #max_train_samples = int(os.getenv("MAX_TRAIN_SAMPLES", "0"))
+    #max_val_samples = int(os.getenv("MAX_VAL_SAMPLES", "0"))
+    max_train_samples = 750
+    max_val_samples = 250
     checkpoint_path = Path(os.getenv("CHECKPOINT_PATH", "models/character_cnn.pt"))
 
     train_loader, _val_loader, keep_classes, train_size, val_size = build_dataloaders(
