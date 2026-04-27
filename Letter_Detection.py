@@ -1,10 +1,14 @@
+import os
+from pathlib import Path
+
+import kagglehub
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, Dataset, Subset
-import kagglehub
-import os
+from torchvision import datasets, transforms
+
+from character_cnn import CharacterCNN
 
 # Download dataset
 path = kagglehub.dataset_download("vaibhao/handwritten-characters")
@@ -61,54 +65,6 @@ val_loader = DataLoader(val_ds, batch_size=BATCH_SIZE, shuffle=False)
 
 num_classes = len(keep_classes) # Results in 35
 
-class CharacterCNN(nn.Module):
-    def __init__(self, num_classes):
-        super(CharacterCNN, self).__init__()
-        
-        # Block 1: 32 filters
-        self.layer1 = nn.Sequential(
-            nn.Conv2d(1, 32, kernel_size=3, padding=1),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2),
-            nn.Dropout(0.2)
-        )
-        
-        # Block 2: 64 filters
-        self.layer2 = nn.Sequential(
-            nn.Conv2d(32, 64, kernel_size=3, padding=1),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2),
-            nn.Dropout(0.2)
-        )
-        
-        # Block 3: 128 filters
-        self.layer3 = nn.Sequential(
-            nn.Conv2d(64, 128, kernel_size=3, padding=1),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2),
-            nn.Dropout(0.2)
-        )
-        
-        # Classifier
-        self.classifier = nn.Sequential(
-            nn.Flatten(),
-            nn.Linear(128 * 8 * 8, 128),
-            nn.BatchNorm1d(128),
-            nn.ReLU(),
-            nn.Dropout(0.5),
-            nn.Linear(128, num_classes)
-        )
-
-    def forward(self, x):
-        x = self.layer1(x)
-        x = self.layer2(x)
-        x = self.layer3(x)
-        x = self.classifier(x)
-        return x
-
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = CharacterCNN(num_classes).to(device)
 
@@ -132,10 +88,26 @@ def train(epochs=15):
         print(f"Epoch {epoch+1} Loss: {total_loss/len(train_loader):.4f}")
 
 
+def save_checkpoint(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    torch.save(
+        {
+            "model_state_dict": model.state_dict(),
+            "class_names": keep_classes,
+            "num_classes": num_classes,
+            "image_size": 64,
+        },
+        str(path),
+    )
+    print(f"Saved checkpoint: {path}")
+
+
 if __name__ == "__main__":
     epochs = int(os.getenv("EPOCHS", "15"))
+    checkpoint_path = Path(os.getenv("CHECKPOINT_PATH", "models/character_cnn.pt"))
     print(
         f"Training config: epochs={epochs}, batch_size={BATCH_SIZE}, "
         f"train_samples={len(train_ds)}, val_samples={len(val_ds)}, device={device}"
     )
     train(epochs=epochs)
+    save_checkpoint(checkpoint_path)
