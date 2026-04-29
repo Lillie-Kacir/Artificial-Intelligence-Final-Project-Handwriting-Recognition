@@ -120,8 +120,8 @@ if __name__ == "__main__":
     batch_size = int(os.getenv("BATCH_SIZE", "32"))
     #max_train_samples = int(os.getenv("MAX_TRAIN_SAMPLES", "0"))
     #max_val_samples = int(os.getenv("MAX_VAL_SAMPLES", "0"))
-    max_train_samples = 750
-    max_val_samples = 250
+    max_train_samples = 50000
+    max_val_samples = 25000
     checkpoint_path = Path(os.getenv("CHECKPOINT_PATH", "models/character_cnn.pt"))
 
     train_loader, _val_loader, keep_classes, train_size, val_size = build_dataloaders(
