@@ -1,5 +1,3 @@
-flask
-gunicorn
 kagglehub
 numpy
 opencv-python
@@ -9,4 +7,3 @@ pyspellchecker
 python-docx
 torch
 torchvision
-flask
