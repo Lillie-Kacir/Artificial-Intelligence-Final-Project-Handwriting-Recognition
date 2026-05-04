@@ -7,3 +7,4 @@ pyspellchecker
 python-docx
 torch
 torchvision
+flask
