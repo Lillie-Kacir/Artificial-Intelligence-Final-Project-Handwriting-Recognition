@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Handwriting Recognition</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+        .container { background: white; border-radius: 10px; padding: 40px; max-width: 500px; margin: 0 auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        input[type="file"] { margin: 20px 0; padding: 10px; }
+        button { background: #007bff; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        .loading { display: none; margin-top: 20px; color: #666; }
+        .status { margin-top: 20px; padding: 10px; border-radius: 5px; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✍️ Handwriting Recognition</h1>
+        <p>Upload a photo of handwritten text and get digital text back</p>
+        
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" accept=".jpg,.jpeg,.png" required>
+            <br>
+            <button type="submit">Process Image</button>
+        </form>
+        
+        <div class="loading" id="loading">
+            ⏳ Processing your image... This may take a moment.
+        </div>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('status').innerHTML = '';
+            
+            try {
+                const response = await fetch('/upload', { method: 'POST', body: formData });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'predicted_words.txt';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    document.getElementById('status').innerHTML = '<div class="status success">✅ Success! Your file has been downloaded.</div>';
+                } else {
+                    const error = await response.text();
+                    document.getElementById('status').innerHTML = `<div class="status error">❌ Error: ${error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('status').innerHTML = `<div class="status error">❌ Connection error: ${error.message}</div>`;
+            }
+            
+            document.getElementById('loading').style.display = 'none';
+        };
+    </script>
+</body>
+</html>

@@ -1,2 +1,30 @@
+# Virtual environment
 .venv/
+venv/
+env/
+ENV/
+
+# Python cache
 __pycache__/
+*.pyc
+*.pyo
+
+# Flask stuff
+instance/
+.webassets-cache
+
+# Output files
+outputs/
+demo_assets/
+demo_output/
+
+# Model checkpoint (optional - can be large)
+models/*.pt
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
