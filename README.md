@@ -1,9 +1,9 @@
 # Artificial-Intelligence-Final-Project-Handwriting-Recognition
 
 ## User Access
-This website is accesible via a Render hosting. It may take 30-60 seconds to boot, as the site is hosted on a free plan. Please visit this site for user access:
+This website is accesible via a Railway hosting. It may take some time to boot, as the site is hosted on a free plan. Also, please try to use smaller image files for faster results. (Or use the images provided in the repo). Please visit this site for easy user access:
 
-https://artificial-intelligence-final-project-2hps.onrender.com/
+https://artificial-intelligence-final-project-handwritin-production.up.railway.app/
 
 For developer information, continue on with this README.
 
@@ -14,9 +14,7 @@ This repository includes an end-to-end handwriting processing pipeline that:
 3. Applies word prediction/correction for noisy OCR output.
 4. Exports the predicted text to both `.txt` and `.docx`.
 
-Additionally, a Flask-based web application provides a user-friendly interface for uploading images and receiving transcribed text without using the command line. The web app features a space-themed UI with drag-and-drop upload, real-time processing, and automatic file download.
-
-
+Additionally, a Flask-based web application provides a user-friendly interface for uploading images and receiving transcribed text without using the command line. The web app features a space-themed UI with drag-and-drop upload, real-time processing, and automatic file download. This can be used instead of the Railway app in case it is down.
 
 ## Quick start
 
