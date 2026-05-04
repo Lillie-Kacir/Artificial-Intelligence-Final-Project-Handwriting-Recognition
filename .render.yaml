@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: handwriting-recognition
+    runtime: python
+    buildCommand: ./build.sh
+    startCommand: gunicorn app_space:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0

@@ -1,3 +1,5 @@
+flask
+gunicorn
 kagglehub
 numpy
 opencv-python
