@@ -1,6 +1,11 @@
 FROM python:3.11-slim
 
-RUN apt-get update && apt-get install -y tesseract-ocr tesseract-ocr-eng
+# Install Tesseract and OpenCV system dependencies
+RUN apt-get update && apt-get install -y \
+    tesseract-ocr \
+    tesseract-ocr-eng \
+    libgl1-mesa-glx \
+    libglib2.0-0
 
 WORKDIR /app
 
@@ -11,4 +16,4 @@ COPY . .
 
 RUN mkdir -p demo_assets outputs models
 
-CMD ["gunicorn", "app_space:app", "--bind", "0.0.0.0:8080"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8080"]
