@@ -16,6 +16,9 @@ This repository includes an end-to-end handwriting processing pipeline that:
 
 Additionally, a Flask-based web application provides a user-friendly interface for uploading images and receiving transcribed text without using the command line. The web app features a space-themed UI with drag-and-drop upload, real-time processing, and automatic file download. This can be used instead of the Railway app in case it is down.
 
+## Testing
+As this project was built through agentic engineering, there had to be structures put in place to ensure the integrity of the code could be managed. To do this, we created a small-scale demo that could be deployed for testing changes in the code that were implemented with AI. Additionally, any code that was generated with AI or troubleshooting guided by AI was carefully examined line-by-line where feasible to ensure the quality of the code. You will find the demo available below.
+
 ## Quick start
 
 Create and activate/install with your virtualenv (or use `.venv/bin/...` commands directly):
