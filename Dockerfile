@@ -20,4 +20,4 @@ COPY . .
 
 RUN mkdir -p demo_assets outputs models
 
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8080"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8080", "--timeout", "300"]
