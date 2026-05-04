@@ -1,4 +1,12 @@
 # Artificial-Intelligence-Final-Project-Handwriting-Recognition
+
+## User Access
+This website is accesible via a Render hosting. It may take 30-60 seconds to boot, as the site is hosted on a free plan. Please visit this site for user access:
+
+https://artificial-intelligence-final-project-2hps.onrender.com/
+
+For developer information, continue on with this README.
+
 This repository includes an end-to-end handwriting processing pipeline that:
 
 1. Takes an input image of handwritten text.
@@ -7,6 +15,8 @@ This repository includes an end-to-end handwriting processing pipeline that:
 4. Exports the predicted text to both `.txt` and `.docx`.
 
 Additionally, a Flask-based web application provides a user-friendly interface for uploading images and receiving transcribed text without using the command line. The web app features a space-themed UI with drag-and-drop upload, real-time processing, and automatic file download.
+
+
 
 ## Quick start
 
