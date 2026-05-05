@@ -102,3 +102,7 @@ Run a quick evaluation against the built-in demo reference text:
 ```
 
 This prints the expected text, predicted text, and word-level accuracy.
+
+## Artificial intelligence citation
+
+Agentic agents such as Cursor AI and Deepseek AI were used in the collabrative sense in order to develop this product. Ideation, as well as the planning phase were conducted by human thought and then given to agentic agents in order to try to create a working demo. 
