@@ -5,6 +5,8 @@ This website is accesible via a Railway hosting. It may take some time to boot, 
 
 https://artificial-intelligence-final-project-handwritin-production.up.railway.app/
 
+Uploaded images should contain black text which should be plainly written in print on a blank white backround for the best accuracy. 
+
 For developer information, continue on with this README.
 
 This repository includes an end-to-end handwriting processing pipeline that:
